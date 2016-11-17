@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/JUASP-G73-Android/Desktop/equation.jar"/>
 	<classpathentry kind="lib" path="C:/Users/JUASP-G73-Android/Desktop/JADE-all-4.3.3/JADE-bin-4.3.3/jade/lib/jade.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
