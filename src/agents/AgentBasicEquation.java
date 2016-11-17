@@ -35,7 +35,7 @@ public class AgentBasicEquation extends Agent{
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("BasicEquationHandling");
+		sd.setType("BasicEquation");
 		sd.setName("BasicEquationAgent");
 		dfd.addServices(sd);		
 		try {
@@ -56,7 +56,7 @@ public class AgentBasicEquation extends Agent{
 					ACLMessage msg=receive();					
 					if(msg!=null && msg.getContentObject() instanceof BasicEquation){
 						BasicEquation be = (BasicEquation) msg.getContentObject();												
-						System.out.println(this.getClass().getSimpleName() + ":Réception d'un BasicEquation à dériver.");
+						System.out.println(this.getClass().getSimpleName() + ":Réception d'une BasicEquation à dériver.");
 						be.printUserReadable();
 						
 						//Formulation de la réponse

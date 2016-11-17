@@ -2,10 +2,8 @@ package agents;
 
 import java.io.IOException;
 
-import core.AbstractEquation;
+import core.Constant;
 import core.Equation;
-import core.MultiplicativeEquation;
-import core.SummativeEquation;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
@@ -15,15 +13,12 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
-public class AgentSummativeEquation extends Agent {
-
-	private static final long serialVersionUID = 8040609610985189379L;
-
-	private Equation derivate(SummativeEquation se){
-		AbstractEquation u = derivate(se.getFirst());
-		AbstractEquation v = derivate(se.getSecond());
-		return new SummativeEquation(u,v);
-	}	
+public class AgentConstant extends Agent{
+	private static final long serialVersionUID = -8564986329709013737L;
+	
+	private Equation derivate(Constant c){
+		return new Constant(0);		
+	}
 
 	@Override
 	protected void setup() {
@@ -34,8 +29,8 @@ public class AgentSummativeEquation extends Agent {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("SummativeEquation");
-		sd.setName("SummativeEquationAgent");
+		sd.setType("Constant");
+		sd.setName("ConstantAgent");
 		dfd.addServices(sd);		
 		try {
 			DFService.register(this, dfd);
@@ -44,7 +39,7 @@ public class AgentSummativeEquation extends Agent {
 			e1.printStackTrace();
 		}
 		
-		
+	
 		addBehaviour(new CyclicBehaviour() {			
 			private static final long serialVersionUID = 8464649767606932209L;
 
@@ -53,15 +48,15 @@ public class AgentSummativeEquation extends Agent {
 				try {
 					System.out.println(this.getClass().getSimpleName() + ": CyclicBehaviour a été démarré.");
 					ACLMessage msg=receive();					
-					if(msg!=null && msg.getContentObject() instanceof SummativeEquation){
-						SummativeEquation se = (SummativeEquation) msg.getContentObject();												
-						System.out.println(this.getClass().getSimpleName() + ":Réception d'une SummativeEquation à dériver.");
-						se.printUserReadable();
+					if(msg!=null && msg.getContentObject() instanceof Constant){
+						Constant c = (Constant) msg.getContentObject();												
+						System.out.println(this.getClass().getSimpleName() + ":Réception d'une Constante à dériver.");
+						c.printUserReadable();
 						
 						//Formulation de la réponse
 						ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 						message.addReceiver(msg.getSender());
-						message.setContentObject(derivate(se));
+						message.setContentObject(derivate(c));
 						send(message);
 					}
 					else{
@@ -76,5 +71,7 @@ public class AgentSummativeEquation extends Agent {
 				}
 			} 
 		});
+	
 	}
+
 }
