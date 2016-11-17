@@ -7,6 +7,10 @@ import core.Constant;
 import core.Equation;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
@@ -27,6 +31,20 @@ public class AgentBasicEquation extends Agent{
 		// TODO Auto-generated method stub
 		super.setup();
 		System.out.println(this.getClass().getSimpleName() + ": a été démarré.");
+		
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("BasicEquationHandling");
+		sd.setName("BasicEquationAgent");
+		dfd.addServices(sd);		
+		try {
+			DFService.register(this, dfd);
+		} catch (FIPAException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 	
 		addBehaviour(new CyclicBehaviour() {			
 			private static final long serialVersionUID = 8464649767606932209L;
