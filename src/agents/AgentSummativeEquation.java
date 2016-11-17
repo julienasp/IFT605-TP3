@@ -77,4 +77,14 @@ public class AgentSummativeEquation extends Agent {
 			} 
 		});
 	}
+	@Override
+	protected void takeDown() {
+		// Deregister from the yellow pages
+		try {
+		DFService.deregister(this);
+		}
+		catch (FIPAException fe) {
+		fe.printStackTrace();
+		}
+	}
 }
