@@ -1,5 +1,6 @@
 package containers;
 
+import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.AgentContainer;
@@ -11,9 +12,9 @@ public class MultiplicativeEquationContainer {
 		try {
 			Runtime r = Runtime.instance();
 			ProfileImpl pI = new ProfileImpl(false);
-			pI.setParameter(ProfileImpl.MAIN_HOST, "Localhost");
+			pI.setParameter(Profile.MAIN_HOST, "Localhost");
 			AgentContainer aC = r.createAgentContainer(pI);
-			AgentController agentController = aC.createNewAgent("MultiplicativeEquation", "agents.MultiplicativeEquation", new Object[] {});
+			AgentController agentController = aC.createNewAgent("MultiplicativeEquation", "agents.AgentMultiplicativeEquation", new Object[] {});
 			agentController.start();
 		} catch (ControllerException e) {
 			// TODO Auto-generated catch block

@@ -16,8 +16,9 @@ import jade.lang.acl.UnreadableException;
 
 public class AgentBasicEquation extends Agent{
 	private static final long serialVersionUID = -8564986329709013737L;
-	
-	private Equation derivate(BasicEquation be){
+
+	@SuppressWarnings("static-method")
+	protected Equation derivate(BasicEquation be){
 		if(be.getExponent() == 1){
 			return new Constant(be.getCoefficient());
 		}
@@ -31,11 +32,11 @@ public class AgentBasicEquation extends Agent{
 		// TODO Auto-generated method stub
 		super.setup();
 		System.out.println(this.getClass().getSimpleName() + ": a été démarré.");
-		
+
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("BasicEquation");
+		sd.setType(BasicEquation.class.getSimpleName());
 		sd.setName("BasicEquationAgent");
 		dfd.addServices(sd);		
 		try {
@@ -44,8 +45,8 @@ public class AgentBasicEquation extends Agent{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-	
+
+
 		addBehaviour(new CyclicBehaviour() {			
 			private static final long serialVersionUID = 8464649767606932209L;
 
@@ -58,7 +59,7 @@ public class AgentBasicEquation extends Agent{
 						BasicEquation be = (BasicEquation) msg.getContentObject();												
 						System.out.println(this.getClass().getSimpleName() + ":Réception d'une BasicEquation à dériver.");
 						be.printUserReadable();
-						
+
 						//Formulation de la réponse
 						ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 						message.addReceiver(msg.getSender());
@@ -77,16 +78,16 @@ public class AgentBasicEquation extends Agent{
 				}
 			} 
 		});
-	
+
 	}
 	@Override
 	protected void takeDown() {
 		// Deregister from the yellow pages
 		try {
-		DFService.deregister(this);
+			DFService.deregister(this);
 		}
 		catch (FIPAException fe) {
-		fe.printStackTrace();
+			fe.printStackTrace();
 		}
 	}
 }

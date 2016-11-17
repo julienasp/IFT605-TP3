@@ -1,5 +1,6 @@
 package containers;
 
+import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.AgentContainer;
@@ -11,7 +12,7 @@ public class BasicEquationContainer {
 		try {
 			Runtime r = Runtime.instance();
 			ProfileImpl pI = new ProfileImpl(false);
-			pI.setParameter(ProfileImpl.MAIN_HOST, "Localhost");
+			pI.setParameter(Profile.MAIN_HOST, "Localhost");
 			AgentContainer aC = r.createAgentContainer(pI);
 			AgentController agentController = aC.createNewAgent("BasicEquationAgent", "agents.AgentBasicEquation", new Object[] {});
 			agentController.start();

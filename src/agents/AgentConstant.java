@@ -16,7 +16,7 @@ import jade.lang.acl.UnreadableException;
 public class AgentConstant extends Agent{
 	private static final long serialVersionUID = -8564986329709013737L;
 	
-	private Equation derivate(Constant c){
+	protected static Equation derivate(Constant c){
 		return new Constant(0);		
 	}
 
@@ -29,7 +29,7 @@ public class AgentConstant extends Agent{
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("Constant");
+		sd.setType(Constant.class.getSimpleName());
 		sd.setName("ConstantAgent");
 		dfd.addServices(sd);		
 		try {
