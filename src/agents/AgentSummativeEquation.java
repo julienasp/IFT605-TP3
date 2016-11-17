@@ -48,6 +48,9 @@ public class AgentSummativeEquation extends Agent {
 		// Envoi
 		System.out.print("Requete de dérivation pour l'équation "+eq.getClass().getSimpleName()+" : ");
 		eq.printUserReadable();
+		if(eq instanceof SummativeEquation){ // probleme de receive quand j'envoi le msg a l'agent courant
+			return (AbstractEquation) derivate((SummativeEquation) eq);
+		}
 		AID agent = getService(eq.getClass().getSimpleName());
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		try {
@@ -60,15 +63,11 @@ public class AgentSummativeEquation extends Agent {
 		// Reception
 		MessageTemplate type = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 		System.out.println("j'attends");
-		ACLMessage rMsg = receive(type);
-		if(msg != null){
-			try {
-				AbstractEquation rEq = (AbstractEquation) rMsg.getContentObject();
-				return rEq;
-			} catch (UnreadableException e) {e.printStackTrace();}
-		}
-		else{
-		}
+		ACLMessage rMsg = blockingReceive(type);
+		try {
+			AbstractEquation rEq = (AbstractEquation) rMsg.getContentObject();
+			return rEq;
+		} catch (UnreadableException e) {e.printStackTrace();}
 		return null;
 	}
 

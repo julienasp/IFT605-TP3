@@ -48,6 +48,9 @@ public class AgentMultiplicativeEquation extends Agent{
 		// Envoi
 		System.out.print("Requete de dérivation pour l'équation "+eq.getClass().getSimpleName()+" : ");
 		eq.printUserReadable();
+		if(eq instanceof MultiplicativeEquation){ // probleme de receive quand j'envoi le msg a l'agent courant
+			return (AbstractEquation) derivate((MultiplicativeEquation) eq);
+		}
 		AID agent = getService(eq.getClass().getSimpleName());
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		try {
