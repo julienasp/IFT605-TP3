@@ -1,9 +1,7 @@
 package agents;
 
 import java.io.IOException;
-
 import core.BasicEquation;
-import core.Constant;
 import core.Equation;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -17,20 +15,23 @@ import jade.lang.acl.UnreadableException;
 public class AgentVieuxSage extends Agent{
 	private static final long serialVersionUID = -8564986329709013737L;
 
-	private boolean isAcceptableDerivation(Equation sourceEquation, Equation derivedEquation, Double acceptableRate){
+	private boolean isAcceptableDerivation(Equation sourceEquation, Equation derivedEquation, Double acceptableErrorRate){
 		//Part one - Slope from two early given points on f(x) and f'(x) where x=1 and x=2		
 		Double slopePartOne = sourceEquation.getFunctionValue(2) - sourceEquation.getFunctionValue(1);		
-		Double resultPartOne = (derivedEquation.getFunctionValue(1) + derivedEquation.getFunctionValue(2)) / 2 ;		
+		Double averageDerivationPartOne = (derivedEquation.getFunctionValue(1) + derivedEquation.getFunctionValue(2)) / 2 ;
+		Double resultPartOne = Math.abs( ( slopePartOne - averageDerivationPartOne ) / slopePartOne) * 100;
 		
 		//Part two - Slope from two early given points on f(x) and f'(x) where x=11 and x=12	
 		Double slopePartTwo = sourceEquation.getFunctionValue(12) - sourceEquation.getFunctionValue(11);		
-		Double resultPartTwo = (derivedEquation.getFunctionValue(12) + derivedEquation.getFunctionValue(11)) / 2 ;
+		Double averageDerivationPartTwo = (derivedEquation.getFunctionValue(11) + derivedEquation.getFunctionValue(12)) / 2 ;
+		Double resultPartTwo = Math.abs( ( slopePartTwo - averageDerivationPartTwo ) / slopePartTwo) * 100;
 		
 		//Part three - Slope from two early given points on f(x) and f'(x) where x=21 and x=22	
 		Double slopePartThree = sourceEquation.getFunctionValue(22) - sourceEquation.getFunctionValue(21);		
-		Double resultPartThree = (derivedEquation.getFunctionValue(22) + derivedEquation.getFunctionValue(21)) / 2 ;
+		Double averageDerivationPartThree = (derivedEquation.getFunctionValue(22) + derivedEquation.getFunctionValue(21)) / 2 ;
+		Double resultPartThree = Math.abs( ( slopePartThree - averageDerivationPartThree ) / slopePartThree) * 100;
 		
-		return (100 >= acceptableRate)? true : false;
+		return ( (resultPartOne + resultPartTwo + resultPartThree)/3 <= acceptableErrorRate);
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class AgentVieuxSage extends Agent{
 						//Formulation de la réponse
 						ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 						message.addReceiver(msg.getSender());
-						message.setContentObject(derivate(be));
+						//message.setContentObject(isAcceptableDerivation(....));
 						send(message);
 					}
 					else{
