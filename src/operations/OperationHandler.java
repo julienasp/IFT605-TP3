@@ -5,7 +5,7 @@ import java.util.Vector;
 import core.Equation;
 
 public class OperationHandler {
-	private Vector<IBasicOperation> operationsList;
+	private Vector<Vector<IBasicOperation>> operationsList;
 	private Equation source;	
 	private Vector<Equation> vResult;
 	
@@ -14,7 +14,7 @@ public class OperationHandler {
 		super();
 		this.source = source;		
 		this.vResult = new Vector<Equation>();
-		this.operationsList = new Vector<IBasicOperation>();
+		this.operationsList = new Vector<Vector<IBasicOperation>>();
 		
 		//Basic Add operations
 		operationsList.add(new AddCoefficientToExponent());
