@@ -2,6 +2,6 @@ package operations;
 
 import core.Equation;
 
-public interface IBasicOperations {
+public interface IBasicOperation {
 	public Equation apply(Equation equation);
 }

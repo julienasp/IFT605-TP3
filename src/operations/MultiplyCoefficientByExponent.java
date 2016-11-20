@@ -3,7 +3,7 @@ package operations;
 import core.BasicEquation;
 import core.Equation;
 
-public class MultiplyCoefficientByExponent implements IBasicOperations{
+public class MultiplyCoefficientByExponent implements IBasicOperation{
 
 	public Equation apply(Equation e) {
 		BasicEquation be = (BasicEquation) e;

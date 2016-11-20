@@ -3,7 +3,7 @@ package operations;
 import core.BasicEquation;
 import core.Equation;
 
-public class SubstractOneToExponent implements IBasicOperations{
+public class SubstractOneToExponent implements IBasicOperation{
 
 	public Equation apply(Equation e) {
 		BasicEquation be = (BasicEquation) e;

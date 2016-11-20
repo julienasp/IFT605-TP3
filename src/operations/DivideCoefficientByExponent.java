@@ -3,7 +3,7 @@ package operations;
 import core.BasicEquation;
 import core.Equation;
 
-public class DivideCoefficientByExponent implements IBasicOperations {
+public class DivideCoefficientByExponent implements IBasicOperation {
 	public Equation apply(Equation e) {
 		BasicEquation be = (BasicEquation) e;
 		return new BasicEquation(be.getCoefficient()/be.getExponent(), be.getExponent());
