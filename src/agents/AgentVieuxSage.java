@@ -2,9 +2,7 @@ package agents;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import core.BasicEquation;
 import core.Equation;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -24,31 +22,31 @@ public class AgentVieuxSage extends Agent{
 		Double averageDerivationPartOne = (derivedEquation.getFunctionValue(1) + derivedEquation.getFunctionValue(2)) / 2 ;
 		Double resultPartOne = Math.abs( ( slopePartOne - averageDerivationPartOne ) / slopePartOne) * 100;
 		
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": slopePartOne: " + slopePartOne.toString());
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": averageDerivationPartOne: " + averageDerivationPartOne.toString());
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": resultPartOne: " + resultPartOne.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartOne: " + slopePartOne.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartOne: " + averageDerivationPartOne.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartOne: " + resultPartOne.toString());
 		
 		//Part two - Slope from two early given points on f(x) and f'(x) where x=11 and x=12	
 		Double slopePartTwo = sourceEquation.getFunctionValue(12) - sourceEquation.getFunctionValue(11);		
 		Double averageDerivationPartTwo = (derivedEquation.getFunctionValue(11) + derivedEquation.getFunctionValue(12)) / 2 ;
 		Double resultPartTwo = Math.abs( ( slopePartTwo - averageDerivationPartTwo ) / slopePartTwo) * 100;
 		
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": slopePartTwo: " + slopePartTwo.toString());
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": averageDerivationPartTwo: " + averageDerivationPartTwo.toString());
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": resultPartTwo: " + resultPartTwo.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartTwo: " + slopePartTwo.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartTwo: " + averageDerivationPartTwo.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartTwo: " + resultPartTwo.toString());
 		
 		//Part three - Slope from two early given points on f(x) and f'(x) where x=21 and x=22	
 		Double slopePartThree = sourceEquation.getFunctionValue(22) - sourceEquation.getFunctionValue(21);		
 		Double averageDerivationPartThree = (derivedEquation.getFunctionValue(22) + derivedEquation.getFunctionValue(21)) / 2 ;
 		Double resultPartThree = Math.abs( ( slopePartThree - averageDerivationPartThree ) / slopePartThree) * 100;
 		
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": slopePartThree: " + slopePartThree.toString());
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": averageDerivationPartThree: " + averageDerivationPartThree.toString());
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": resultPartThree: " + resultPartThree.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartThree: " + slopePartThree.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartThree: " + averageDerivationPartThree.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartThree: " + resultPartThree.toString());
 		
 		
 		Double finalResult = (resultPartOne + resultPartTwo + resultPartThree)/3;
-		System.out.println(this.getClass().getSimpleName() +":-"+this.getClass().getEnclosingMethod().getName() + ": finalResult: " + finalResult.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): finalResult: " + finalResult.toString());
 
 		
 		return ( finalResult <= acceptableErrorRate);
@@ -63,7 +61,7 @@ public class AgentVieuxSage extends Agent{
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType(BasicEquation.class.getSimpleName());
+		sd.setType("VieuxSage");
 		sd.setName("VieuxSageAgent");
 		dfd.addServices(sd);		
 		try {
@@ -82,10 +80,10 @@ public class AgentVieuxSage extends Agent{
 				try {
 					System.out.println(this.getClass().getSimpleName() + ": CyclicBehaviour a été démarré.");
 					ACLMessage msg=receive();					
-					if(msg!=null && msg.getContentObject() instanceof List<?>){
+					if(msg!=null && msg.getContentObject() instanceof ArrayList<?>){
 						@SuppressWarnings("unchecked")
-						List<Equation> equationList = (ArrayList<Equation>) msg.getContentObject();												
-						System.out.println(this.getClass().getSimpleName() + ":Réception d'un Vector d'équation à valider.");
+						ArrayList<Equation> equationList = (ArrayList<Equation>) msg.getContentObject();												
+						System.out.println(this.getClass().getSimpleName() + ":Réception d'une List d'équation à valider.");
 						if(equationList.size() == 2){
 							for (Equation e : equationList){
 								e.printUserReadable();

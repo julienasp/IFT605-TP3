@@ -1,14 +1,19 @@
 package agents;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
+import core.BasicEquation;
+import core.Constant;
 import core.Equation;
 import core.EquationsProvider;
+import core.SummativeEquation;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -38,6 +43,43 @@ public class ClientAgent extends Agent{
 
 	@Override
 	protected void setup() {
+		addBehaviour(new OneShotBehaviour(){
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void action() {
+				SummativeEquation s = new SummativeEquation(new BasicEquation(3,2),new Constant(8));
+				BasicEquation d = new BasicEquation(6,1);
+				ArrayList<Equation> l = new ArrayList<Equation>();
+				l.add(0, s); // source
+				l.add(1, d);// derivated random
+				
+				AID destination = getService("VieuxSage");
+				try {
+					ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+					msg.addReceiver(destination);
+					msg.setContentObject(l);
+					send(msg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+				ACLMessage msg = blockingReceive(template);
+				if(msg != null){
+					try {
+						System.out.println("la dérivation est: " + msg.getContentObject().toString());						
+					} catch (UnreadableException e) {
+						e.printStackTrace();
+					}
+					
+				}
+				
+			}
+			
+		});
+		/*
 		addBehaviour(new CyclicBehaviour(){
 
 			private static final long serialVersionUID = -3068556774651966589L;
@@ -85,14 +127,14 @@ public class ClientAgent extends Agent{
 					}
 					
 				}
-				/*else{
-					block();
-				}*/
+				//else{
+				//	block();
+				//}
 			}
 
 
 
-		});
+		});*/
 	}
 
 }
