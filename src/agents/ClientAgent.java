@@ -44,7 +44,7 @@ public class ClientAgent extends Agent{
 	@Override
 	protected void setup() {
 		addBehaviour(new OneShotBehaviour(){
-			
+			//STATIC TEST #1
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -79,6 +79,81 @@ public class ClientAgent extends Agent{
 			}
 			
 		});
+addBehaviour(new OneShotBehaviour(){
+			//STATIC TEST #2
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void action() {
+				SummativeEquation s = new SummativeEquation(new BasicEquation(5,3),new SummativeEquation(new BasicEquation(3,2),new BasicEquation(2,1)));
+				SummativeEquation s2 = new SummativeEquation(new BasicEquation(15,2),new SummativeEquation(new BasicEquation(6,1),new Constant(2)));
+
+				ArrayList<Equation> l = new ArrayList<Equation>();
+				l.add(0, s); // source
+				l.add(1, s2);// derivated random
+				
+				AID destination = getService("VieuxSage");
+				try {
+					ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+					msg.addReceiver(destination);
+					msg.setContentObject(l);
+					send(msg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+				ACLMessage msg = blockingReceive(template);
+				if(msg != null){
+					try {
+						System.out.println("la dérivation est: " + msg.getContentObject().toString());						
+					} catch (UnreadableException e) {
+						e.printStackTrace();
+					}
+					
+				}
+				
+			}
+			
+		});
+
+addBehaviour(new OneShotBehaviour(){
+	//STATIC TEST #3 WRONG
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void action() {
+		SummativeEquation s = new SummativeEquation(new BasicEquation(5,3),new SummativeEquation(new BasicEquation(3,2),new BasicEquation(2,1)));
+		SummativeEquation s2 = new SummativeEquation(new BasicEquation(15,2),new SummativeEquation(new BasicEquation(6,1),new Constant(8)));
+
+		ArrayList<Equation> l = new ArrayList<Equation>();
+		l.add(0, s); // source
+		l.add(1, s2);// derivated random
+		
+		AID destination = getService("VieuxSage");
+		try {
+			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+			msg.addReceiver(destination);
+			msg.setContentObject(l);
+			send(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+		ACLMessage msg = blockingReceive(template);
+		if(msg != null){
+			try {
+				System.out.println("la dérivation est: " + msg.getContentObject().toString());						
+			} catch (UnreadableException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
+});
 		/*
 		addBehaviour(new CyclicBehaviour(){
 

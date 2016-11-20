@@ -35,21 +35,39 @@ public class AgentVieuxSage extends Agent{
 		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartTwo: " + averageDerivationPartTwo.toString());
 		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartTwo: " + resultPartTwo.toString());
 		
+	
 		//Part three - Slope from two early given points on f(x) and f'(x) where x=21 and x=22	
 		Double slopePartThree = sourceEquation.getFunctionValue(22) - sourceEquation.getFunctionValue(21);		
 		Double averageDerivationPartThree = (derivedEquation.getFunctionValue(22) + derivedEquation.getFunctionValue(21)) / 2 ;
 		Double resultPartThree = Math.abs( ( slopePartThree - averageDerivationPartThree ) / slopePartThree) * 100;
-		
+				
 		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartThree: " + slopePartThree.toString());
 		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartThree: " + averageDerivationPartThree.toString());
 		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartThree: " + resultPartThree.toString());
 		
+		//Part four - Slope from two early given points on f(x) and f'(x) where x=31 and x=32	
+		Double slopePartFour = sourceEquation.getFunctionValue(32) - sourceEquation.getFunctionValue(31);		
+		Double averageDerivationPartFour = (derivedEquation.getFunctionValue(32) + derivedEquation.getFunctionValue(31)) / 2 ;
+		Double resultPartFour = Math.abs( ( slopePartFour - averageDerivationPartFour ) / slopePartFour) * 100;
 		
-		Double finalResult = (resultPartOne + resultPartTwo + resultPartThree)/3;
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): finalResult: " + finalResult.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartFour: " + slopePartFour.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartFour: " + averageDerivationPartFour.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartFour: " + resultPartFour.toString());
+		
+		//Part five - Slope from two early given points on f(x) and f'(x) where x=41 and x=42	
+		Double slopePartFive = sourceEquation.getFunctionValue(42) - sourceEquation.getFunctionValue(41);		
+		Double averageDerivationPartFive = (derivedEquation.getFunctionValue(42) + derivedEquation.getFunctionValue(41)) / 2 ;
+		Double resultPartFive = Math.abs( ( slopePartFive - averageDerivationPartFive ) / slopePartFive) * 100;
+		
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartFive: " + slopePartFive.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartFive: " + averageDerivationPartFive.toString());
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartFive: " + resultPartFive.toString());
+		
+		Double averageResult = (resultPartOne + resultPartTwo + resultPartThree + resultPartFour + resultPartFive)/5;
+		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageResult: " + averageResult.toString());
 
 		
-		return ( finalResult <= acceptableErrorRate);
+		return ( resultPartOne <= acceptableErrorRate && resultPartTwo <= acceptableErrorRate && resultPartThree <= acceptableErrorRate && resultPartFour <= acceptableErrorRate && resultPartFive <= acceptableErrorRate );
 	}
 
 	@Override
@@ -92,7 +110,7 @@ public class AgentVieuxSage extends Agent{
 							//Formulation de la réponse
 							ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 							message.addReceiver(msg.getSender());
-							message.setContentObject( isAcceptableDerivation((Equation)equationList.get(0),(Equation)equationList.get(1), (double) 5) );
+							message.setContentObject( isAcceptableDerivation((Equation)equationList.get(0),(Equation)equationList.get(1), (double) 5.5) );
 							send(message);
 						}
 					}
