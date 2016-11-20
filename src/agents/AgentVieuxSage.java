@@ -2,6 +2,7 @@ package agents;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import core.Equation;
 import jade.core.Agent;
@@ -16,58 +17,29 @@ import jade.lang.acl.UnreadableException;
 public class AgentVieuxSage extends Agent{
 	private static final long serialVersionUID = -8564986329709013737L;
 
-	private boolean isAcceptableDerivation(Equation sourceEquation, Equation derivedEquation, Double acceptableErrorRate){
-		//Part one - Slope from two early given points on f(x) and f'(x) where x=1 and x=2		
-		Double slopePartOne = sourceEquation.getFunctionValue(2) - sourceEquation.getFunctionValue(1);		
-		Double averageDerivationPartOne = (derivedEquation.getFunctionValue(1) + derivedEquation.getFunctionValue(2)) / 2 ;
-		Double resultPartOne = Math.abs( ( slopePartOne - averageDerivationPartOne ) / slopePartOne) * 100;
+	private boolean isAcceptableDerivation(Equation sourceEquation, Equation derivedEquation, Double acceptableErrorRate, int nbIterationTest){
+		Random randomGenerator = new Random();
+		Double averageResult = 0.0;		
+		boolean bResult = true;
 		
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartOne: " + slopePartOne.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartOne: " + averageDerivationPartOne.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartOne: " + resultPartOne.toString());
+		//Heuristic calculations - Slope from two early given points on f(x) and f'(x) on random x's
+		for(int i=0; i < nbIterationTest; i++){
+			int randomX = randomGenerator.nextInt(1500);
+			Double slope = sourceEquation.getFunctionValue(randomX+1) - sourceEquation.getFunctionValue(randomX);		
+			Double averageDerivation = (derivedEquation.getFunctionValue(randomX+1) + derivedEquation.getFunctionValue(randomX)) / 2 ;
+			Double result = Math.abs( ( slope- averageDerivation ) / slope) * 100;
+			
+			System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): iteration #" + i + " with x=" + randomX + " slope:" + slope.toString());
+			System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): iteration #" + i + " with x=" + randomX + " average: " + averageDerivation.toString());
+			System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): iteration #" + i + " with x=" + randomX + " result: "+ result.toString());
 		
-		//Part two - Slope from two early given points on f(x) and f'(x) where x=11 and x=12	
-		Double slopePartTwo = sourceEquation.getFunctionValue(12) - sourceEquation.getFunctionValue(11);		
-		Double averageDerivationPartTwo = (derivedEquation.getFunctionValue(11) + derivedEquation.getFunctionValue(12)) / 2 ;
-		Double resultPartTwo = Math.abs( ( slopePartTwo - averageDerivationPartTwo ) / slopePartTwo) * 100;
+			averageResult = averageResult + result;
+			if(result > acceptableErrorRate) bResult=false;
+		}
 		
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartTwo: " + slopePartTwo.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartTwo: " + averageDerivationPartTwo.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartTwo: " + resultPartTwo.toString());
-		
-	
-		//Part three - Slope from two early given points on f(x) and f'(x) where x=21 and x=22	
-		Double slopePartThree = sourceEquation.getFunctionValue(22) - sourceEquation.getFunctionValue(21);		
-		Double averageDerivationPartThree = (derivedEquation.getFunctionValue(22) + derivedEquation.getFunctionValue(21)) / 2 ;
-		Double resultPartThree = Math.abs( ( slopePartThree - averageDerivationPartThree ) / slopePartThree) * 100;
-				
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartThree: " + slopePartThree.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartThree: " + averageDerivationPartThree.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartThree: " + resultPartThree.toString());
-		
-		//Part four - Slope from two early given points on f(x) and f'(x) where x=31 and x=32	
-		Double slopePartFour = sourceEquation.getFunctionValue(32) - sourceEquation.getFunctionValue(31);		
-		Double averageDerivationPartFour = (derivedEquation.getFunctionValue(32) + derivedEquation.getFunctionValue(31)) / 2 ;
-		Double resultPartFour = Math.abs( ( slopePartFour - averageDerivationPartFour ) / slopePartFour) * 100;
-		
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartFour: " + slopePartFour.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartFour: " + averageDerivationPartFour.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartFour: " + resultPartFour.toString());
-		
-		//Part five - Slope from two early given points on f(x) and f'(x) where x=41 and x=42	
-		Double slopePartFive = sourceEquation.getFunctionValue(42) - sourceEquation.getFunctionValue(41);		
-		Double averageDerivationPartFive = (derivedEquation.getFunctionValue(42) + derivedEquation.getFunctionValue(41)) / 2 ;
-		Double resultPartFive = Math.abs( ( slopePartFive - averageDerivationPartFive ) / slopePartFive) * 100;
-		
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): slopePartFive: " + slopePartFive.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageDerivationPartFive: " + averageDerivationPartFive.toString());
-		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): resultPartFive: " + resultPartFive.toString());
-		
-		Double averageResult = (resultPartOne + resultPartTwo + resultPartThree + resultPartFour + resultPartFive)/5;
+		averageResult = averageResult/nbIterationTest;
 		System.out.println(this.getClass().getSimpleName() +":-isAcceptableDerivation(): averageResult: " + averageResult.toString());
-
-		
-		return ( resultPartOne <= acceptableErrorRate && resultPartTwo <= acceptableErrorRate && resultPartThree <= acceptableErrorRate && resultPartFour <= acceptableErrorRate && resultPartFive <= acceptableErrorRate );
+		return bResult; // false if at least one of the random x's tested exceeds the acceptableErrorRate
 	}
 
 	@Override
@@ -110,7 +82,7 @@ public class AgentVieuxSage extends Agent{
 							//Formulation de la réponse
 							ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 							message.addReceiver(msg.getSender());
-							message.setContentObject( isAcceptableDerivation((Equation)equationList.get(0),(Equation)equationList.get(1), (double) 5.5) );
+							message.setContentObject( isAcceptableDerivation((Equation)equationList.get(0),(Equation)equationList.get(1), (double) 5.5, 15 ));
 							send(message);
 						}
 					}
