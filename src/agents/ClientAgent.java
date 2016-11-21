@@ -197,12 +197,11 @@ addBehaviour(new OneShotBehaviour(){
 	
 });
 
-addBehaviour(new CyclicBehaviour(){
+addBehaviour(new OneShotBehaviour(){
 
 	private static final long serialVersionUID = -3068556774651966589L;
 
-	private Vector<Equation> equations; 
-	private Iterator<Equation> it;
+	private Vector<Equation> equations;
 	private OperationHandler oh;
 	private List<IBasicOperation>favCombinaison;
 
@@ -210,16 +209,15 @@ addBehaviour(new CyclicBehaviour(){
 	public void onStart() {
 		EquationsProvider ep = new EquationsProvider();
 		equations = ep.getList();
-		it = equations.iterator();
 		oh = new OperationHandler();
 	}
 
 	@Override
 	public void action() {
 		for(Equation sEquation : equations){
-			
-			System.out.println("We retreive the current equation.");
-			sEquation = it.next();
+			System.out.println(" ");
+			System.out.println("------------------------------------------------");
+			System.out.println("We retreive the current equation.");			
 			System.out.println("The current equation is:");
 			sEquation.printUserReadable();
 			System.out.println("Searching for service :Vieux Sage");
@@ -234,6 +232,7 @@ addBehaviour(new CyclicBehaviour(){
 			int i = 0;
 			for(List<IBasicOperation> bo : oh.getCombinationOperationList()){			
 				try {
+					List<IBasicOperation> basicOperationUsed;
 					ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 					msg.addReceiver(destination);
 					ArrayList<Equation> equationList = new ArrayList<Equation>();
@@ -241,10 +240,12 @@ addBehaviour(new CyclicBehaviour(){
 					if(favCombinaison != null && i == 0){
 						System.out.println("Test avec la combinaison favorite: " + favCombinaison.toString());
 						equationList.add(oh.getModifiedEquation(sEquation, favCombinaison));
+						basicOperationUsed = favCombinaison;
 					}
 					else{
 						System.out.println("Test avec la combinaison courante: " + bo.toString());
 						equationList.add(oh.getModifiedEquation(sEquation, bo));
+						basicOperationUsed = bo;
 					}
 					
 					msg.setContentObject(equationList);
@@ -255,10 +256,11 @@ addBehaviour(new CyclicBehaviour(){
 					ACLMessage msgrcv = blockingReceive(template);
 					if(msgrcv != null){					
 						if((Boolean) msgrcv.getContentObject()){
-							//favCombinaison = bo;
+							favCombinaison = basicOperationUsed;
+							System.out.println(" ");
 							System.out.println("la dérivation pour:");	
 							equationList.get(0).printUserReadable();
-							System.out.println("à été trouver avec la combinaison suivante: " + bo.toString() );
+							System.out.println("à été trouver avec la combinaison suivante: " + basicOperationUsed.toString() );
 							System.out.println("le resultat trouvé pour la dérivation est:");
 							equationList.get(1).printUserReadable();
 							break;
