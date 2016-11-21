@@ -88,17 +88,17 @@ public class OperationHandler {
 		
 		//Part 2: for the second equation in source
 		if(source.getFirst() instanceof SummativeEquation){ 
-			m2 = getModifiedEquation( (SummativeEquation) (source.getFirst()),equationModifiers);
+			m2 = getModifiedEquation( (SummativeEquation) (source.getSecond()),equationModifiers);
 		}
 		else if(source.getFirst() instanceof MultiplicativeEquation){
-			m2 = getModifiedEquation( (MultiplicativeEquation) (source.getFirst()),equationModifiers);
+			m2 = getModifiedEquation( (MultiplicativeEquation) (source.getSecond()),equationModifiers);
 		}
 		else if (source.getFirst() instanceof Constant){
 			Constant c = (Constant) source.getFirst();
 			m2 = getModifiedEquation( new BasicEquation(c.getValue(),1), equationModifiers);
 		}
 		else{
-			m2 = getModifiedEquation((BasicEquation)source.getFirst(),equationModifiers );
+			m2 = getModifiedEquation((BasicEquation)source.getSecond(),equationModifiers );
 		}
 		
 		return new MultiplicativeEquation(m1,m2);
@@ -111,10 +111,10 @@ public class OperationHandler {
 		
 		//Part 1: for the first equation in source
 		if(source.getFirst() instanceof SummativeEquation){ 
-			m1 = getModifiedEquation( (SummativeEquation) (source.getFirst()),equationModifiers);
+			m1 = getModifiedEquation( (SummativeEquation) source.getFirst(),equationModifiers);
 		}
 		else if(source.getFirst() instanceof MultiplicativeEquation){
-			m1 = getModifiedEquation( (MultiplicativeEquation) (source.getFirst()),equationModifiers);
+			m1 = getModifiedEquation( (MultiplicativeEquation) source.getFirst(),equationModifiers);
 		}
 		else if (source.getFirst() instanceof Constant){
 			Constant c = (Constant) source.getFirst();
@@ -126,17 +126,17 @@ public class OperationHandler {
 		
 		//Part 2: for the second equation in source
 		if(source.getFirst() instanceof SummativeEquation){ 
-			m2 = getModifiedEquation( (SummativeEquation) (source.getFirst()),equationModifiers);
+			m2 = getModifiedEquation( (SummativeEquation) (source.getSecond()),equationModifiers);
 		}
 		else if(source.getFirst() instanceof MultiplicativeEquation){
-			m2 = getModifiedEquation( (MultiplicativeEquation) (source.getFirst()),equationModifiers);
+			m2 = getModifiedEquation( (MultiplicativeEquation) (source.getSecond()),equationModifiers);
 		}
 		else if (source.getFirst() instanceof Constant){
 			Constant c = (Constant) source.getFirst();
 			m2 = getModifiedEquation( new BasicEquation(c.getValue(),1), equationModifiers);
 		}
 		else{
-			m2 = getModifiedEquation((BasicEquation)source.getFirst(),equationModifiers );
+			m2 = getModifiedEquation((BasicEquation)source.getSecond(),equationModifiers );
 		}
 		
 		return new SummativeEquation(m1,m2);
