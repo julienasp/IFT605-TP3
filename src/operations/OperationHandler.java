@@ -43,10 +43,8 @@ public class OperationHandler {
 		
 		
 		for (int i = 1; i <= operationsList.size(); i++){
-		        powerSet.addAll(combination(operationsList, i));
-		        
-		}
-		System.out.println(powerSet.toString());
+		        powerSet.addAll(combination(operationsList, i));		        
+		}		
 		this.combinationOperationList = powerSet;			
 	}
 	

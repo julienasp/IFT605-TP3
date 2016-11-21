@@ -215,52 +215,63 @@ addBehaviour(new CyclicBehaviour(){
 	}
 
 	@Override
-	public void action() {		
-		Equation sEquation = null;
-		if(it.hasNext()){
+	public void action() {
+		for(Equation sEquation : equations){
+			
+			System.out.println("We retreive the current equation.");
 			sEquation = it.next();
-		}
-		System.out.println("Searching for service :Vieux Sage");
-		AID destination = getService("VieuxSage");
-		if(destination == null){
-			System.out.println("No agent handles type : ");
-			return;
-		}
-		
-		int i = 0;
-		for(List<IBasicOperation> bo : oh.getCombinationOperationList()){			
-			try {
-				ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-				msg.addReceiver(destination);
-				ArrayList<Equation> equationList = new ArrayList<Equation>();
-				equationList.add(sEquation);
-				if(favCombinaison != null && i == 0){
-					equationList.add(oh.getModifiedEquation(sEquation, favCombinaison));
-				}
-				else{
-					equationList.add(oh.getModifiedEquation(sEquation, bo));
-				}
-				
-				msg.setContentObject(equationList);
-				send(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
+			System.out.println("The current equation is:");
+			sEquation.printUserReadable();
+			System.out.println("Searching for service :Vieux Sage");
+			
+			AID destination = getService("VieuxSage");
+			
+			if(destination == null){
+				System.out.println("No agent handles type : ");
+				return;
 			}
 			
-			MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-			ACLMessage msgrcv = blockingReceive(template);
-			if(msgrcv != null){
+			int i = 0;
+			for(List<IBasicOperation> bo : oh.getCombinationOperationList()){			
 				try {
-					if((Boolean) msgrcv.getContentObject()){
-						favCombinaison = bo;
-						break;
+					ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+					msg.addReceiver(destination);
+					ArrayList<Equation> equationList = new ArrayList<Equation>();
+					equationList.add(sEquation);
+					if(favCombinaison != null && i == 0){
+						System.out.println("Test avec la combinaison favorite: " + favCombinaison.toString());
+						equationList.add(oh.getModifiedEquation(sEquation, favCombinaison));
 					}
+					else{
+						System.out.println("Test avec la combinaison courante: " + bo.toString());
+						equationList.add(oh.getModifiedEquation(sEquation, bo));
+					}
+					
+					msg.setContentObject(equationList);
+					send(msg);
+					
+					
+					MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+					ACLMessage msgrcv = blockingReceive(template);
+					if(msgrcv != null){					
+						if((Boolean) msgrcv.getContentObject()){
+							//favCombinaison = bo;
+							System.out.println("la dérivation pour:");	
+							equationList.get(0).printUserReadable();
+							System.out.println("à été trouver avec la combinaison suivante: " + bo.toString() );
+							System.out.println("le resultat trouvé pour la dérivation est:");
+							equationList.get(1).printUserReadable();
+							break;
+						}		
+					}//end if				
+				} catch (IOException e) {
+					e.printStackTrace();
 				} catch (UnreadableException e) {
 					e.printStackTrace();
 				}				
-			}//end if
-			i++;
-		}//end for
+				i++;
+			}//end for
+		}		
 	}//end action
 });
 
