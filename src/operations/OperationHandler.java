@@ -4,20 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import core.AbstractEquation;
 import core.BasicEquation;
-import core.Equation;
+import core.Constant;
+import core.MultiplicativeEquation;
+import core.SummativeEquation;
 
 public class OperationHandler {
 	private List<IBasicOperation> operationsList;
-	private List<List<IBasicOperation>> combinationOperationList;
-	private Equation source;	
-	private ArrayList<Equation> vResult;
+	private List<List<IBasicOperation>> combinationOperationList;		
 	
-	
-	public OperationHandler(Equation source) {
-		super();
-		this.source = source;		
-		this.vResult = new ArrayList<Equation>();
+	public OperationHandler() {
+		super();				
 		this.operationsList = new ArrayList<IBasicOperation>();
 		
 		//Basic Add operations
@@ -25,16 +23,16 @@ public class OperationHandler {
 		operationsList.add(new AddExponentToCoefficient());
 		operationsList.add(new AddOneToCoefficient());
 		operationsList.add(new AddOneToExponent());
+		
+		//Basic Multiply operations
+		operationsList.add(new MultiplyCoefficientByExponent());
+		operationsList.add(new MultiplyExponentByCoefficient());
 				
 		//Basic Substract operations
 		operationsList.add(new SubstractCoefficientToExponent());
 		operationsList.add(new SubstractExponentToCoefficient());
 		operationsList.add(new SubstractOneToCoefficient());
-		operationsList.add(new SubstractOneToExponent());
-				
-		//Basic Multiply operations
-		operationsList.add(new MultiplyCoefficientByExponent());
-		operationsList.add(new MultiplyExponentByCoefficient());
+		operationsList.add(new SubstractOneToExponent());	
 				
 		//Basic Divide operations
 		operationsList.add(new DivideCoefficientByExponent());
@@ -49,6 +47,91 @@ public class OperationHandler {
 		}
 		System.out.println(powerSet.toString());
 		this.combinationOperationList = powerSet;			
+	}
+	
+	public MultiplicativeEquation getModifiedEquation(MultiplicativeEquation source, List<IBasicOperation> equationModifiers){
+		AbstractEquation m1;
+		AbstractEquation m2;
+		
+		//Part 1: for the first equation in source
+		if(source.getFirst() instanceof SummativeEquation){ 
+			m1 = getModifiedEquation( (SummativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if(source.getFirst() instanceof MultiplicativeEquation){
+			m1 = getModifiedEquation( (MultiplicativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if (source.getFirst() instanceof Constant){
+			Constant c = (Constant) source.getFirst();
+			m1 = getModifiedEquation( new BasicEquation(c.getValue(),1), equationModifiers);
+		}
+		else{
+			m1 = getModifiedEquation((BasicEquation)source.getFirst(),equationModifiers );
+		}
+		
+		//Part 2: for the second equation in source
+		if(source.getFirst() instanceof SummativeEquation){ 
+			m2 = getModifiedEquation( (SummativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if(source.getFirst() instanceof MultiplicativeEquation){
+			m2 = getModifiedEquation( (MultiplicativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if (source.getFirst() instanceof Constant){
+			Constant c = (Constant) source.getFirst();
+			m2 = getModifiedEquation( new BasicEquation(c.getValue(),1), equationModifiers);
+		}
+		else{
+			m2 = getModifiedEquation((BasicEquation)source.getFirst(),equationModifiers );
+		}
+		
+		return new MultiplicativeEquation(m1,m2);
+	}
+	
+	
+	public SummativeEquation getModifiedEquation(SummativeEquation source, List<IBasicOperation> equationModifiers){
+		AbstractEquation m1;
+		AbstractEquation m2;
+		
+		//Part 1: for the first equation in source
+		if(source.getFirst() instanceof SummativeEquation){ 
+			m1 = getModifiedEquation( (SummativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if(source.getFirst() instanceof MultiplicativeEquation){
+			m1 = getModifiedEquation( (MultiplicativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if (source.getFirst() instanceof Constant){
+			Constant c = (Constant) source.getFirst();
+			m1 = getModifiedEquation( new BasicEquation(c.getValue(),1), equationModifiers);
+		}
+		else{
+			m1 = getModifiedEquation((BasicEquation)source.getFirst(),equationModifiers );
+		}
+		
+		//Part 2: for the second equation in source
+		if(source.getFirst() instanceof SummativeEquation){ 
+			m2 = getModifiedEquation( (SummativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if(source.getFirst() instanceof MultiplicativeEquation){
+			m2 = getModifiedEquation( (MultiplicativeEquation) (source.getFirst()),equationModifiers);
+		}
+		else if (source.getFirst() instanceof Constant){
+			Constant c = (Constant) source.getFirst();
+			m2 = getModifiedEquation( new BasicEquation(c.getValue(),1), equationModifiers);
+		}
+		else{
+			m2 = getModifiedEquation((BasicEquation)source.getFirst(),equationModifiers );
+		}
+		
+		return new SummativeEquation(m1,m2);
+	}
+	
+	
+	
+	public BasicEquation getModifiedEquation(BasicEquation source, List<IBasicOperation> equationModifiers){
+		BasicEquation temp = source;
+		for(IBasicOperation bo : equationModifiers){
+			temp = (BasicEquation) bo.apply(temp);
+		}
+		return temp;
 	}
 	
 	//Une forme de l'implémentation du lien ci-dessous
@@ -83,15 +166,6 @@ public class OperationHandler {
 	    return combination;
 	}
 	
-	
-	
-	public Equation getSource() {
-		return source;
-	}
-	public void setSource(Equation source) {
-		this.source = source;
-	}
-
 	public List<IBasicOperation> getOperationsList() {
 		return operationsList;
 	}
@@ -108,17 +182,10 @@ public class OperationHandler {
 			List<List<IBasicOperation>> combinationOperationList) {
 		this.combinationOperationList = combinationOperationList;
 	}
-
-	public ArrayList<Equation> getvResult() {
-		return vResult;
-	}
-
-	public void setvResult(ArrayList<Equation> vResult) {
-		this.vResult = vResult;
-	}
+	
 	public static void main(String[] args) {
 		
-		OperationHandler o = new OperationHandler(new BasicEquation(2,3));
+		OperationHandler o = new OperationHandler();
 		System.out.println(o.getCombinationOperationList().toString());
 		System.out.println("Il existe: " + o.getCombinationOperationList().size() + " combinaisons possibles.");
 	}
