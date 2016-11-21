@@ -8,4 +8,8 @@ public class DivideCoefficientByExponent implements IBasicOperation {
 		BasicEquation be = (BasicEquation) e;
 		return new BasicEquation(be.getCoefficient()/be.getExponent(), be.getExponent());
 	}
+	@Override
+	public String toString() {		
+		return this.getClass().getSimpleName();
+	}
 }

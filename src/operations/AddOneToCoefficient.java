@@ -8,4 +8,8 @@ public class AddOneToCoefficient implements IBasicOperation {
 		BasicEquation be = (BasicEquation) e;
 		return new BasicEquation(be.getCoefficient() + 1,be.getExponent());
 	}
+	@Override
+	public String toString() {		
+		return this.getClass().getSimpleName();
+	}
 }

@@ -9,5 +9,9 @@ public class SubstractOneToExponent implements IBasicOperation{
 		BasicEquation be = (BasicEquation) e;
 		return new BasicEquation(be.getCoefficient(),be.getExponent() - 1);
 	}
+	@Override
+	public String toString() {		
+		return this.getClass().getSimpleName();
+	}
 
 }

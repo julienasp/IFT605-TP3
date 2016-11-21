@@ -9,5 +9,9 @@ public class MultiplyExponentByCoefficient implements IBasicOperation{
 		BasicEquation be = (BasicEquation) e;
 		return new BasicEquation(be.getCoefficient(),(int) (be.getExponent() * be.getCoefficient()));
 	}
+	@Override
+	public String toString() {		
+		return this.getClass().getSimpleName();
+	}
 
 }
