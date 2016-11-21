@@ -3,7 +3,11 @@ package agents;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
+
+import operations.IBasicOperation;
+import operations.OperationHandler;
 
 import core.BasicEquation;
 import core.Constant;
@@ -192,6 +196,74 @@ addBehaviour(new OneShotBehaviour(){
 	}
 	
 });
+
+addBehaviour(new CyclicBehaviour(){
+
+	private static final long serialVersionUID = -3068556774651966589L;
+
+	private Vector<Equation> equations; 
+	private Iterator<Equation> it;
+	private OperationHandler oh;
+	private List<IBasicOperation>favCombinaison;
+
+	@Override
+	public void onStart() {
+		EquationsProvider ep = new EquationsProvider();
+		equations = ep.getList();
+		it = equations.iterator();
+		oh = new OperationHandler();
+	}
+
+	@Override
+	public void action() {		
+		Equation sEquation = null;
+		if(it.hasNext()){
+			sEquation = it.next();
+		}
+		System.out.println("Searching for service :Vieux Sage");
+		AID destination = getService("VieuxSage");
+		if(destination == null){
+			System.out.println("No agent handles type : ");
+			return;
+		}
+		
+		int i = 0;
+		for(List<IBasicOperation> bo : oh.getCombinationOperationList()){			
+			try {
+				ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+				msg.addReceiver(destination);
+				ArrayList<Equation> equationList = new ArrayList<Equation>();
+				equationList.add(sEquation);
+				if(favCombinaison != null && i == 0){
+					equationList.add(oh.getModifiedEquation(sEquation, favCombinaison));
+				}
+				else{
+					equationList.add(oh.getModifiedEquation(sEquation, bo));
+				}
+				
+				msg.setContentObject(equationList);
+				send(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+			ACLMessage msgrcv = blockingReceive(template);
+			if(msgrcv != null){
+				try {
+					if((Boolean) msgrcv.getContentObject()){
+						favCombinaison = bo;
+						break;
+					}
+				} catch (UnreadableException e) {
+					e.printStackTrace();
+				}				
+			}//end if
+			i++;
+		}//end for
+	}//end action
+});
+
 		/*
 		addBehaviour(new CyclicBehaviour(){
 

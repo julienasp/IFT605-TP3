@@ -7,6 +7,7 @@ import java.util.List;
 import core.AbstractEquation;
 import core.BasicEquation;
 import core.Constant;
+import core.Equation;
 import core.MultiplicativeEquation;
 import core.SummativeEquation;
 
@@ -49,7 +50,26 @@ public class OperationHandler {
 		this.combinationOperationList = powerSet;			
 	}
 	
-	public MultiplicativeEquation getModifiedEquation(MultiplicativeEquation source, List<IBasicOperation> equationModifiers){
+	
+	public Equation getModifiedEquation(Equation source,List<IBasicOperation> equationModifiers ){
+		if(source instanceof SummativeEquation){ 
+			return getModifiedEquation( (SummativeEquation) source,equationModifiers);
+		}
+		else if(source instanceof MultiplicativeEquation){
+			return getModifiedEquation( (MultiplicativeEquation) source,equationModifiers);
+		}
+		else if (source instanceof Constant){
+			Constant c = (Constant) source;
+			return getModifiedEquation( new BasicEquation(c.getValue(),1), equationModifiers);
+		}
+		else{
+			return getModifiedEquation((BasicEquation)source,equationModifiers );
+		}
+	}
+
+	
+	
+	private MultiplicativeEquation getModifiedEquation(MultiplicativeEquation source, List<IBasicOperation> equationModifiers){
 		AbstractEquation m1;
 		AbstractEquation m2;
 		
@@ -87,7 +107,7 @@ public class OperationHandler {
 	}
 	
 	
-	public SummativeEquation getModifiedEquation(SummativeEquation source, List<IBasicOperation> equationModifiers){
+	private SummativeEquation getModifiedEquation(SummativeEquation source, List<IBasicOperation> equationModifiers){
 		AbstractEquation m1;
 		AbstractEquation m2;
 		
@@ -126,7 +146,7 @@ public class OperationHandler {
 	
 	
 	
-	public BasicEquation getModifiedEquation(BasicEquation source, List<IBasicOperation> equationModifiers){
+	private BasicEquation getModifiedEquation(BasicEquation source, List<IBasicOperation> equationModifiers){
 		BasicEquation temp = source;
 		for(IBasicOperation bo : equationModifiers){
 			temp = (BasicEquation) bo.apply(temp);
