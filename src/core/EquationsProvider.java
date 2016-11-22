@@ -24,7 +24,6 @@ public class EquationsProvider {
 		MultiplicativeEquation m1 = new MultiplicativeEquation(b1,b2);
 		MultiplicativeEquation m2 = new MultiplicativeEquation(s1,s2);
 		MultiplicativeEquation m3 = new MultiplicativeEquation(s3,s4);
-		MultiplicativeEquation m4 = new MultiplicativeEquation(m2,m3);
 		
 		list.add((Equation) c1);
 		list.add((Equation) b1);
@@ -39,7 +38,6 @@ public class EquationsProvider {
 		list.add((Equation) m1);
 		list.add((Equation) m2);
 		list.add((Equation) m3);
-		list.add((Equation) m4);
 	}
 
 	public Vector<Equation> getList() {

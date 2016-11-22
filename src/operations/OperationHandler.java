@@ -152,6 +152,10 @@ public class OperationHandler {
 		return temp;
 	}
 	
+	public SummativeEquation SumOfMultiplyEquationOneWithEquationTwoPrimeAndMultiplyEquationOnePrimeWithEquationTwo(MultiplicativeEquation source, MultiplicativeEquation derivated){
+		return new SummativeEquation(new MultiplicativeEquation(source.getFirst(),derivated.getSecond()),new MultiplicativeEquation(derivated.getFirst(),source.getSecond()) );
+	}
+	
 	//Une forme de l'implémentation du lien ci-dessous
 	//https://google.github.io/guava/releases/19.0/api/docs/com/google/common/collect/Sets.html#powerSet(java.util.Set)
 	private static <T> List<List<T>> combination(List<T> values, int size) {
