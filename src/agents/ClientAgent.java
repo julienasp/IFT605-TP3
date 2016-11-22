@@ -12,6 +12,7 @@ import core.BasicEquation;
 import core.Constant;
 import core.Equation;
 import core.EquationsProvider;
+import core.MultiplicativeEquation;
 import core.SummativeEquation;
 import jade.core.AID;
 import jade.core.Agent;
@@ -244,7 +245,12 @@ public class ClientAgent extends Agent{
 							System.out.println("Test avec la combinaison courante: " + bo.toString());
 							equationList.add(oh.getModifiedEquation(sEquation, bo));							
 							basicOperationUsed = bo;
-						}						
+						}
+						//Hardcoded Operation basique pour MultiplicativeEquation 
+						if(sEquation instanceof MultiplicativeEquation){
+							equationList.set(1, oh.SumOfMultiplyEquationOneWithEquationTwoPrimeAndMultiplyEquationOnePrimeWithEquationTwo((MultiplicativeEquation)sEquation,(MultiplicativeEquation)equationList.get(1)));
+						}
+						
 						msg.setContentObject(equationList);
 						send(msg);
 						
@@ -257,7 +263,13 @@ public class ClientAgent extends Agent{
 								System.out.println(" ");
 								System.out.println("la dérivation pour:");	
 								equationList.get(0).printUserReadable();
-								System.out.println("à été trouver avec la combinaison suivante: " + basicOperationUsed.toString() );
+								System.out.println("À été trouver avec la combinaison suivante: " + basicOperationUsed.toString() );
+								
+								//Hardcoded pour MultiplicativeEquation
+								if(sEquation instanceof MultiplicativeEquation){
+									System.out.println("En combinaison avec l'opération suivante: [AddMultiplyOfEquationOneWithEquationTwoPrimeWithMultiplyOfEquationOnePrimeWithEquationTwo]");
+								}
+								
 								System.out.println("le resultat trouvé pour la dérivation est:");
 								equationList.get(1).printUserReadable();
 								break;
