@@ -62,7 +62,7 @@ public class AgentMultiplicativeEquation extends Agent{
 
 
 		// ------------- FSM
-		FSMBehaviour fsm = new FSMBehaviour(this);
+		final FSMBehaviour fsm = new FSMBehaviour(this);
 		// ------------- Phase 1 - Reception
 		OneShotBehaviour reception = new OneShotBehaviour(this) {
 			private static final long serialVersionUID = -3563888301751231452L;
