@@ -11,6 +11,8 @@ public class EquationsProvider {
 	}
 	
 	private void initialise() {
+		Constant c1 = new Constant(3);
+		Constant c2 = new Constant(4);
 		BasicEquation b1 = new BasicEquation(2,2);
 		BasicEquation b2 = new BasicEquation(-3,2);
 		BasicEquation b3 = new BasicEquation(6,2);
@@ -21,9 +23,12 @@ public class EquationsProvider {
 		MultiplicativeEquation m1 = new MultiplicativeEquation(b1,b2);
 		MultiplicativeEquation m2 = new MultiplicativeEquation(s1,s2);
 		MultiplicativeEquation m3 = new MultiplicativeEquation(s3,s4);
-		MultiplicativeEquation m4 = new MultiplicativeEquation(m2,m3);	
-		//MyEquation my = new MyEquation(2,2);
-		//list.add((Equation)my);
+		
+		UnknownEquation u1 = new UnknownEquation(2,2,5);
+		UnknownEquation u2 = new UnknownEquation(2,2,5);
+		
+		list.add((Equation) c1);
+		list.add((Equation) c2);
 		list.add((Equation) b1);
 		list.add((Equation) b2);
 		list.add((Equation) b3);
@@ -34,7 +39,8 @@ public class EquationsProvider {
 		list.add((Equation) m1);
 		list.add((Equation) m2);
 		list.add((Equation) m3);
-		list.add((Equation) m4);
+		list.add((Equation) u1);
+		list.add((Equation) u2);
 	}
 
 	public Vector<Equation> getList() {
