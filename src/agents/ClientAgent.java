@@ -8,7 +8,7 @@ import core.Equation;
 import core.EquationsProvider;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -38,12 +38,14 @@ public class ClientAgent extends Agent{
 
 	@Override
 	protected void setup() {
-		addBehaviour(new CyclicBehaviour(){
+		
+		addBehaviour(new OneShotBehaviour(){
 
 			private static final long serialVersionUID = -3068556774651966589L;
 
 			private Vector<Equation> equations; 
 			private Iterator<Equation> it;
+
 
 			@Override
 			public void onStart() {
@@ -55,43 +57,56 @@ public class ClientAgent extends Agent{
 			@Override
 			public void action() {
 				Equation sEquation = null;
-				if(it.hasNext()){
+				while(it.hasNext()){
 					sEquation = it.next();
-				}
-				System.out.println("Searching for service :"+sEquation.getClass().getSimpleName());
-				AID destination = getService(sEquation.getClass().getSimpleName());
-				if(destination == null){
-					System.out.println("No agent handles this kind of Equation : "+sEquation.getClass().getSimpleName());
-					return;
-				}
-				
-				try {
-					ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-					msg.addReceiver(destination);
-					msg.setContentObject(sEquation);
-					send(msg);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-				ACLMessage msg = blockingReceive(template);
-				if(msg != null){
+
+					System.out.println("Searching for service :"+sEquation.getClass().getSimpleName());
+					AID destination = getService(sEquation.getClass().getSimpleName());
+					if(destination == null){
+						System.out.println("No agent handles this kind of Equation : "+sEquation.getClass().getSimpleName());
+						return;
+					}
+
 					try {
-						Equation rEquation = (Equation) msg.getContentObject();
-						rEquation.printUserReadable();
-					} catch (UnreadableException e) {
+						ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+						msg.addReceiver(destination);
+						msg.setContentObject(sEquation);
+						send(msg);
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
+					MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+					ACLMessage msg = blockingReceive(template);
+					if(msg != null){
+						try {
+							Equation rEquation = (Equation) msg.getContentObject();
+							rEquation.printUserReadable();
+						} catch (UnreadableException e) {
+							e.printStackTrace();
+						}
+					}
 					
+					/*addBehaviour(new OneShotBehaviour() {
+						private static final long serialVersionUID = 2589530672584629475L;
+
+						@Override
+						public void action() {
+							MessageTemplate template = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+							ACLMessage msg = blockingReceive(template);
+							if(msg != null){
+								try {
+									Equation rEquation = (Equation) msg.getContentObject();
+									//System.out.println("La dérivé de "+map.get(Integer.parseInt(msg.getInReplyTo()))+"est :");
+									rEquation.printUserReadable();
+								} catch (UnreadableException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					});*/
+
 				}
-				/*else{
-					block();
-				}*/
 			}
-
-
-
 		});
 	}
 
