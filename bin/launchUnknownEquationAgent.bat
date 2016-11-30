@@ -1,0 +1,1 @@
+start java jade.Boot -container -host localhost -agents UnknownEquationAgent:agents.AgentUnknownEquation

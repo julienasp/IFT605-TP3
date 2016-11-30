@@ -61,11 +61,18 @@ public class ClientAgent extends Agent{
 					sEquation = it.next();
 
 					System.out.println("Searching for service :"+sEquation.getClass().getSimpleName());
-					AID destination = getService(sEquation.getClass().getSimpleName());
-					if(destination == null){
-						System.out.println("No agent handles this kind of Equation : "+sEquation.getClass().getSimpleName());
-						return;
-					}
+					AID destination = null;
+					do{
+						destination = getService(sEquation.getClass().getSimpleName());
+						if(destination == null){
+							System.out.println("No agent handles this kind of Equation : "+sEquation.getClass().getSimpleName());
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}while(destination == null);
 
 					try {
 						ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
